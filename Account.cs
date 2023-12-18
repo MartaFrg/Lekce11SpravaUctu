@@ -24,7 +24,11 @@ namespace Lekce11SpravaUctu
             get { return _balance;}
             private set
             {
-                    _balance = value;
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException("Balance", "Záporný stav účtu.");
+                }
+                _balance = value;
             }
         
         }
@@ -34,16 +38,11 @@ namespace Lekce11SpravaUctu
             {
                 throw new ZapornyVkladException("Balance", "Vklad je záporné číslo.", vklad);
             }
-            try
-            {
+
                 Balance += vklad;
-            }
-            catch (ZapornyVkladException ex)
-            {
-                Console.WriteLine($"Záporná částka vkladu: {vklad}, {ex.Message}");
-            }
             Console.WriteLine("Vloženo na účet " + vklad);
             Console.WriteLine("Celkem na účtu: " + Balance);
+            //Balance = -50;
         }
         public void Withdraw(int vyber)
         {
@@ -51,8 +50,6 @@ namespace Lekce11SpravaUctu
             {
                 throw new ZapornyVyberException("Balance", "Výběr je záporné číslo.", vyber);
             }
-            try
-            {
                 if (Balance >= vyber) {
                     Balance -= vyber;
                     Console.WriteLine("Vybráno z účtu " + vyber);
@@ -60,11 +57,6 @@ namespace Lekce11SpravaUctu
                 else { Console.WriteLine("Nedostatek prostředků na účtu");
                     Console.WriteLine("pokusili jste se vybrat "+vyber);
                 }
-            }
-            catch (ZapornyVkladException ex)
-            {
-                Console.WriteLine($"Záporná částka výběru: {vyber}, {ex.Message}, {ex.Cas}");
-            }
             Console.WriteLine("Celkem na účtu: " + Balance);
         }
 
